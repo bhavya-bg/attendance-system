@@ -1,0 +1,40 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "client/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "build": {
+    "env": {
+      "CI": "false"
+    }
+  },
+  "routes": [
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "client/$1"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production",
+    "MONGO_URI": "mongodb+srv://majorproject:ZOiqeHUs3xvt3Fu4@cluster0.mfempxz.mongodb.net/majorproject?retryWrites=true&w=majority&appName=Cluster0",
+    "JWT_SECRET": "a8f5e9c2d7b4a1f6e3c8d9b2a5f7e4c1d8b6a3f9e2c7d4b1a8f5e3c9d6b2a7f4e1c8d5b3a6f9e2c4d7b1a5f8e3c6d9b2a4f7e1c5d8b6a3f9e2c7d4b1a8f5e3c9d6",
+    "JWT_EXPIRE": "7d",
+    "CLIENT_URL": "https://attendance-system-coral-eight.vercel.app"
+  }
+}

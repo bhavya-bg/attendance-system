@@ -1,0 +1,475 @@
+{
+  "info": {
+    "name": "Attendance & Leave Management System",
+    "_postman_id": "attendance-leave-api",
+    "description": "Complete API collection for Attendance & Leave Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register Student",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('token', jsonData.data.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"student\",\n  \"rollNumber\": \"CS2024001\",\n  \"department\": \"Computer Science\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Register HOD",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('token', jsonData.data.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Head of Department\",\n  \"email\": \"HOD123123@gmail.com\",\n  \"password\": \"HOD123\",\n  \"role\": \"hod\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('token', jsonData.data.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "me"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Attendance - Student",
+      "item": [
+        {
+          "name": "Mark Attendance",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"present\",\n  \"remarks\": \"On time\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/attendance",
+              "host": ["{{base_url}}"],
+              "path": ["attendance"]
+            }
+          }
+        },
+        {
+          "name": "Get My Attendance",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/attendance?limit=30",
+              "host": ["{{base_url}}"],
+              "path": ["attendance"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "30"
+                },
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01",
+                  "disabled": true
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-12-31",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Attendance - Admin",
+      "item": [
+        {
+          "name": "Get All Attendance",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/attendance/all?limit=100&page=1",
+              "host": ["{{base_url}}"],
+              "path": ["attendance", "all"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "100"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "status",
+                  "value": "present",
+                  "disabled": true
+                },
+                {
+                  "key": "userId",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01",
+                  "disabled": true
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-12-31",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Attendance Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/attendance/stats",
+              "host": ["{{base_url}}"],
+              "path": ["attendance", "stats"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01",
+                  "disabled": true
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-12-31",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Leave - Student",
+      "item": [
+        {
+          "name": "Apply for Leave",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"startDate\": \"2024-12-20\",\n  \"endDate\": \"2024-12-22\",\n  \"reason\": \"Family function and personal work. Need to attend an important family event.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/leave",
+              "host": ["{{base_url}}"],
+              "path": ["leave"]
+            }
+          }
+        },
+        {
+          "name": "Get My Leaves",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/leave?limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["leave"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "status",
+                  "value": "pending",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Leave",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/leave/:leaveId",
+              "host": ["{{base_url}}"],
+              "path": ["leave", ":leaveId"],
+              "variable": [
+                {
+                  "key": "leaveId",
+                  "value": "LEAVE_ID_HERE"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Leave - Admin",
+      "item": [
+        {
+          "name": "Get All Leaves",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/leave/all?limit=50&page=1",
+              "host": ["{{base_url}}"],
+              "path": ["leave", "all"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "50"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "status",
+                  "value": "pending",
+                  "disabled": true
+                },
+                {
+                  "key": "userId",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Approve Leave",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"approved\",\n  \"adminRemarks\": \"Approved for family reasons\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/leave/:leaveId",
+              "host": ["{{base_url}}"],
+              "path": ["leave", ":leaveId"],
+              "variable": [
+                {
+                  "key": "leaveId",
+                  "value": "LEAVE_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Reject Leave",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"rejected\",\n  \"adminRemarks\": \"Insufficient reason provided. Please apply with more details.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/leave/:leaveId",
+              "host": ["{{base_url}}"],
+              "path": ["leave", ":leaveId"],
+              "variable": [
+                {
+                  "key": "leaveId",
+                  "value": "LEAVE_ID_HERE"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
